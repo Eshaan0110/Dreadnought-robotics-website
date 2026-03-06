@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DREADNOUGHT ROBOTICS</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --off-white: #f4f0e8;
+  --paper: #ede9df;
+  --grey-light: #d8d3c8;
+  --grey-mid: #888880;
+  --grey-dark: #333330;
+  --shadow: 5px 5px 0px #000;
+  --shadow-lg: 8px 8px 0px #000;
+  --shadow-xl: 12px 12px 0px #000;
+  --shadow-hover: 2px 2px 0px #000;
+  --border: 2px solid #000;
+  --border-thick: 3px solid #000;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--off-white); color: var(--black); font-family: var(--font-body); overflow-x: hidden; cursor: crosshair; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { cursor: crosshair; border: none; background: none; font-family: inherit; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--off-white); border-left: 2px solid var(--black); }
+::-webkit-scrollbar-thumb { background: var(--black); }
+.page { display: none; min-height: 100vh; }
+.page.active { display: block; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; background: var(--black); border-bottom: 3px solid var(--black);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.nav-logo-mark { width: 36px; height: 36px; background: var(--white); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 22px; color: var(--black); }
+.nav-logo-text { font-family: var(--font-display); font-size: 22px; letter-spacing: 3px; color: var(--white); line-height: 1; }
+.nav-links { display: flex; align-items: center; list-style: none; }
+.nav-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-light); padding: 8px 14px; border: 1px solid transparent; transition: all 0.1s; display: block; }
+.nav-links a:hover, .nav-links a.active { color: var(--black); background: var(--white); border-color: var(--white); }
+.nav-cta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--black); background: var(--white); padding: 10px 20px; border: 2px solid var(--white); font-weight: 700; transition: all 0.1s; }
+.nav-cta:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 rgba(255,255,255,0.3); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: crosshair; }
+.hamburger span { width: 26px; height: 2px; background: var(--white); }
+.mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; z-index: 999; background: var(--black); border-bottom: 3px solid var(--black); padding: 12px 20px; flex-direction: column; gap: 2px; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-light); padding: 12px 16px; border: 1px solid transparent; transition: all 0.1s; }
+.mobile-menu a:hover { color: var(--black); background: var(--white); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; padding-top: 64px; background: var(--black);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+/* subtle grid texture */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-center {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 40px 0;
+  animation: slide-up 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--grey-mid); margin-bottom: 32px;
+  display: flex; align-items: center; gap: 16px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; display: inline-block; width: 32px; height: 1px; background: var(--grey-dark);
+}
+/* Title split — DREADNOUGHT on top, logo in middle, ROBOTICS below */
+.hero-title-top {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 11vw, 140px);
+  line-height: 1; letter-spacing: 4px; color: var(--white);
+  display: block;
+}
+.hero-logo-block {
+  width: 120px; height: 120px;
+  border: 3px solid var(--white);
+  background: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  margin: 18px auto;
+  position: relative;
+  box-shadow: 6px 6px 0 var(--white);
+  transition: all 0.1s;
+}
+.hero-logo-block:hover { transform: translate(-3px,-3px); box-shadow: 9px 9px 0 var(--white); }
+.hero-logo-block-inner {
+  font-family: var(--font-display);
+  font-size: 56px; color: var(--white); line-height: 1;
+  letter-spacing: -2px;
+}
+/* corner ticks */
+.hero-logo-block::before, .hero-logo-block::after {
+  content: ''; position: absolute;
+  width: 14px; height: 14px; border-color: var(--grey-mid); border-style: solid;
+}
+.hero-logo-block::before { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+.hero-logo-block::after  { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+
+.hero-title-bottom {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 11vw, 140px);
+  line-height: 1; letter-spacing: 4px;
+  -webkit-text-stroke: 2px var(--white); color: transparent;
+  display: block;
+}
+.hero-sub {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--grey-mid); margin-top: 28px;
+  line-height: 1.8; max-width: 480px;
+}
+.hero-buttons {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  justify-content: center; margin-top: 40px;
+}
+.btn-brutal { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 14px 28px; border: var(--border-thick); box-shadow: var(--shadow); transition: all 0.1s ease; display: inline-flex; align-items: center; gap: 10px; cursor: crosshair; }
+.btn-brutal:hover { transform: translate(-3px,-3px); box-shadow: var(--shadow-lg); }
+.btn-brutal:active { transform: translate(2px,2px); box-shadow: var(--shadow-hover); }
+.btn-brutal.white { background: var(--white); color: var(--black); border-color: var(--white); }
+.btn-brutal.outline { background: transparent; color: var(--white); border-color: var(--white); }
+.btn-brutal.dark { background: var(--black); color: var(--white); border-color: var(--black); }
+
+/* STATS BAR — horizontal row pinned to bottom */
+.hero-stats-bar {
+  position: relative; z-index: 2;
+  width: 100%; margin-top: auto;
+  border-top: 3px solid var(--grey-dark);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  animation: slide-up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+.hero-stat-col {
+  padding: 28px 32px;
+  border-right: 1px solid var(--grey-dark);
+  text-align: left;
+}
+.hero-stat-col:last-child { border-right: none; }
+.hero-stat-num { font-family: var(--font-display); font-size: 52px; color: var(--white); line-height: 1; }
+.hero-stat-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); margin-top: 4px; }
+.hero-stat-desc { font-family: var(--font-body); font-size: 11px; color: var(--grey-dark); margin-top: 2px; }
+
+/* SECTIONS */
+.section-inner { max-width: 1280px; margin: 0 auto; }
+.section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; gap: 32px; flex-wrap: wrap; }
+.section-num { font-family: var(--font-display); font-size: 120px; line-height: 1; color: var(--grey-light); user-select: none; }
+.section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 10px; }
+.section-title { font-family: var(--font-display); font-size: clamp(44px,6vw,80px); line-height: 0.92; letter-spacing: 1px; color: var(--black); text-transform: uppercase; }
+.section-title .inv { background: var(--black); color: var(--white); padding: 0 6px; }
+.section-desc { font-family: var(--font-body); font-size: 13px; color: var(--grey-dark); line-height: 1.9; max-width: 440px; }
+
+/* ACHIEVEMENTS */
+.achievements { padding: 100px 48px; background: var(--off-white); border-bottom: var(--border-thick); }
+.achievements-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+.achievement-card { border: var(--border-thick); border-right: none; padding: 36px 32px; background: var(--white); position: relative; transition: all 0.1s; cursor: default; }
+.achievement-card:last-child { border-right: var(--border-thick); }
+.achievement-card:hover { background: var(--black); color: var(--white); transform: translate(-3px,-3px); box-shadow: var(--shadow-lg); z-index: 2; }
+.achievement-card:hover .achievement-rank { color: var(--grey-light); }
+.achievement-card:hover .achievement-desc { color: var(--grey-mid); }
+.achievement-card:hover .achievement-year { color: var(--grey-dark); }
+.achievement-icon { font-size: 32px; margin-bottom: 20px; display: block; }
+.achievement-rank { font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 10px; }
+.achievement-title { font-family: var(--font-display); font-size: 22px; letter-spacing: 1px; text-transform: uppercase; color: inherit; margin-bottom: 12px; line-height: 1.1; }
+.achievement-desc { font-size: 12px; color: var(--grey-dark); line-height: 1.7; }
+.achievement-year { position: absolute; top: 20px; right: 20px; font-family: var(--font-mono); font-size: 10px; color: var(--grey-light); letter-spacing: 1px; }
+
+/* ABOUT */
+.about { border-bottom: var(--border-thick); display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+.about-img-side { background: var(--black); border-right: var(--border-thick); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; min-height: 500px; }
+.about-img-placeholder-neo { font-family: var(--font-display); font-size: 140px; color: rgba(255,255,255,0.07); letter-spacing: -5px; user-select: none; line-height: 1; text-align: center; padding: 40px; }
+.about-img-label { position: absolute; bottom: 24px; left: 24px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); background: var(--black); border: 1px solid var(--grey-dark); padding: 6px 12px; }
+.about-content-side { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
+.about-text { font-size: 13px; color: var(--grey-dark); line-height: 1.9; margin-bottom: 16px; }
+.about-text.primary { font-size: 14px; color: var(--black); font-weight: 500; }
+.about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+.about-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; border: var(--border); padding: 6px 14px; background: var(--off-white); transition: all 0.1s; cursor: default; }
+.about-tag:hover { background: var(--black); color: var(--white); box-shadow: var(--shadow); transform: translate(-2px,-2px); }
+
+/* PROJECTS */
+.projects-section { padding: 100px 48px; background: var(--paper); border-bottom: var(--border-thick); }
+.projects-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0; border: var(--border-thick); max-width: 1280px; margin: 0 auto; }
+.project-card { border-right: var(--border-thick); border-bottom: var(--border-thick); background: var(--white); overflow: hidden; transition: all 0.1s; cursor: crosshair; }
+.project-card:nth-child(even) { border-right: none; }
+.project-card:nth-last-child(-n+2) { border-bottom: none; }
+.project-card:hover { background: var(--black); color: var(--white); }
+.project-card:hover .project-title { color: var(--white); }
+.project-card:hover .project-desc { color: var(--grey-mid); }
+.project-card:hover .project-tag { border-color: var(--grey-dark); color: var(--grey-mid); background: transparent; }
+.project-card:hover .project-link { color: var(--white); }
+.project-card:hover .project-img-neo { background: var(--grey-dark); }
+.project-card:hover .project-img-badge { background: var(--black); color: var(--white); border-color: var(--grey-dark); }
+.project-card:hover .project-num { color: rgba(255,255,255,0.06); }
+.project-card:hover .project-img-neo-bg { color: rgba(255,255,255,0.04); }
+.project-img-neo { height: 180px; background: var(--off-white); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border-bottom: var(--border-thick); }
+.project-img-neo-bg { font-family: var(--font-display); font-size: 100px; color: rgba(0,0,0,0.06); letter-spacing: -5px; position: absolute; user-select: none; }
+.project-img-badge { position: absolute; top: 14px; left: 14px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; border: var(--border); padding: 4px 10px; background: var(--white); color: var(--black); }
+.project-num { position: absolute; bottom: 14px; right: 14px; font-family: var(--font-display); font-size: 40px; color: rgba(0,0,0,0.1); line-height: 1; }
+.project-content-inner { padding: 28px 28px 32px; }
+.project-title { font-family: var(--font-display); font-size: 26px; letter-spacing: 1px; text-transform: uppercase; color: var(--black); margin-bottom: 12px; line-height: 1; }
+.project-desc { font-size: 12px; color: var(--grey-dark); line-height: 1.8; margin-bottom: 18px; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+.project-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid var(--grey-light); padding: 3px 8px; background: var(--off-white); transition: all 0.1s; }
+.project-link { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--black); display: inline-flex; align-items: center; gap: 8px; transition: gap 0.1s; }
+.project-link:hover { gap: 16px; }
+
+/* COMPETITIONS */
+.competitions-section { padding: 100px 48px; background: var(--black); border-bottom: var(--border-thick); }
+.competitions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 3px solid var(--white); margin-top: 48px; }
+.competition-card { border-right: 3px solid var(--white); padding: 0; overflow: hidden; transition: all 0.1s; cursor: crosshair; background: var(--black); }
+.competition-card:last-child { border-right: none; }
+.competition-card:hover { background: var(--white); }
+.competition-card:hover .competition-name, .competition-card:hover .competition-header-title { color: var(--black); }
+.competition-card:hover .competition-location, .competition-card:hover .competition-desc { color: var(--grey-dark); }
+.competition-card:hover .competition-result { border-color: var(--grey-light); color: var(--black); }
+.competition-card:hover .competition-header { background: var(--off-white); border-bottom-color: var(--grey-light); }
+.competition-header { background: var(--grey-dark); border-bottom: 3px solid var(--white); padding: 40px 36px; display: flex; align-items: flex-end; justify-content: space-between; transition: all 0.1s; }
+.competition-header-title { font-family: var(--font-display); font-size: 64px; letter-spacing: 2px; color: var(--white); line-height: 1; transition: color 0.1s; }
+.competition-flag { font-size: 50px; }
+.competition-content { padding: 36px; }
+.competition-name { font-family: var(--font-display); font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: var(--white); margin-bottom: 8px; line-height: 1.1; transition: color 0.1s; }
+.competition-location { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; transition: color 0.1s; }
+.competition-desc { font-size: 12px; color: var(--grey-mid); line-height: 1.8; margin-bottom: 24px; transition: color 0.1s; }
+.competition-result { display: inline-flex; align-items: center; gap: 8px; border: 2px solid var(--grey-dark); padding: 8px 16px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-light); transition: all 0.1s; }
+
+/* TEAM PREVIEW */
+.team-preview { padding: 100px 48px; background: var(--off-white); border-bottom: var(--border-thick); }
+.team-preview-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 0; border: var(--border-thick); margin-top: 48px; }
+.team-card { border-right: var(--border-thick); padding: 32px 24px; background: var(--white); text-align: center; transition: all 0.1s; cursor: crosshair; position: relative; }
+.team-card:last-child { border-right: none; }
+.team-card:hover { background: var(--black); color: var(--white); transform: translate(-3px,-3px); box-shadow: var(--shadow-lg); z-index: 2; }
+.team-card:hover .team-role { color: var(--grey-mid); }
+.team-card:hover .team-link-btn { border-color: var(--grey-dark); color: var(--white); }
+.team-card:hover .team-avatar { background: var(--grey-dark); border-color: var(--grey-mid); }
+.team-avatar { width: 72px; height: 72px; border: var(--border-thick); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; background: var(--off-white); transition: all 0.1s; }
+.team-name { font-family: var(--font-display); font-size: 16px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; line-height: 1; }
+.team-role { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; }
+.team-links { display: flex; justify-content: center; gap: 6px; }
+.team-link-btn { width: 28px; height: 28px; border: var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10px; font-weight: 700; transition: all 0.1s; cursor: crosshair; }
+
+/* FOOTER */
+footer { background: var(--black); border-top: var(--border-thick); padding: 60px 48px 28px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 0; margin-bottom: 48px; border: 3px solid var(--grey-dark); }
+.footer-col { padding: 36px 32px; border-right: 3px solid var(--grey-dark); }
+.footer-col:last-child { border-right: none; }
+.footer-brand-name { font-family: var(--font-display); font-size: 28px; letter-spacing: 2px; color: var(--white); margin-bottom: 12px; }
+.footer-tagline { font-size: 12px; color: var(--grey-mid); line-height: 1.8; margin-bottom: 24px; }
+.footer-socials { display: flex; gap: 8px; }
+.footer-social { width: 36px; height: 36px; border: 2px solid var(--grey-dark); display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: crosshair; transition: all 0.1s; color: var(--grey-mid); }
+.footer-social:hover { border-color: var(--white); color: var(--white); transform: translate(-2px,-2px); box-shadow: 3px 3px 0 var(--grey-dark); }
+.footer-col-title { font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 20px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links li a { font-size: 12px; color: var(--grey-mid); transition: color 0.1s; }
+.footer-links li a:hover { color: var(--white); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--grey-dark); padding-top: 24px; }
+.footer-copy { font-family: var(--font-mono); font-size: 10px; color: var(--grey-mid); letter-spacing: 1px; }
+.footer-copy span { color: var(--white); }
+
+/* PAGE BANNER */
+.page-banner { padding: 120px 48px 64px; background: var(--black); border-bottom: var(--border-thick); position: relative; overflow: hidden; }
+.page-banner-title { font-family: var(--font-display); font-size: clamp(60px,10vw,120px); line-height: 0.88; letter-spacing: -1px; text-transform: uppercase; color: var(--white); margin-bottom: 16px; }
+.page-banner-title .stroke { -webkit-text-stroke: 2px var(--white); color: transparent; }
+.page-banner-sub { font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 16px; }
+.page-banner-desc { font-size: 13px; color: var(--grey-mid); max-width: 560px; line-height: 1.8; }
+.page-banner-num { position: absolute; right: 48px; bottom: -20px; font-family: var(--font-display); font-size: 200px; line-height: 1; color: rgba(255,255,255,0.04); pointer-events: none; letter-spacing: -10px; }
+
+/* PROJECTS PAGE */
+.projects-page { padding: 0 48px 80px; background: var(--paper); }
+.projects-page-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; border: var(--border-thick); margin-top: 48px; }
+.proj-page-card { border-right: var(--border-thick); border-bottom: var(--border-thick); background: var(--white); overflow: hidden; transition: all 0.1s; cursor: crosshair; }
+.proj-page-card:nth-child(3n) { border-right: none; }
+.proj-page-card:nth-last-child(-n+3) { border-bottom: none; }
+.proj-page-card:hover { background: var(--black); color: var(--white); }
+.proj-page-card:hover .project-title { color: var(--white); }
+.proj-page-card:hover .project-desc { color: var(--grey-mid); }
+.proj-page-card:hover .project-tag { border-color: var(--grey-dark); color: var(--grey-mid); background: transparent; }
+.proj-page-card:hover .project-link { color: var(--white); }
+.proj-page-card:hover .project-img-neo { background: var(--grey-dark); }
+.proj-page-card:hover .project-img-badge { background: var(--black); color: var(--white); border-color: var(--grey-dark); }
+.proj-page-card:hover .project-num { color: rgba(255,255,255,0.06); }
+.proj-page-card:hover .project-img-neo-bg { color: rgba(255,255,255,0.04); }
+
+/* TEAM PAGE */
+.team-page-content { padding: 0 48px 80px; background: var(--off-white); }
+.team-divider { display: flex; align-items: center; gap: 0; margin-top: 0; border-bottom: var(--border-thick); padding: 28px 0 0; }
+.team-divider-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 4px; text-transform: uppercase; background: var(--black); color: var(--white); padding: 8px 24px; border: var(--border-thick); border-bottom: none; transform: translateY(3px); }
+.team-divider-badge { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; border: var(--border-thick); border-bottom: none; border-left: none; padding: 8px 16px; color: var(--grey-mid); transform: translateY(3px); background: var(--white); }
+.team-page-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 0; border: var(--border-thick); border-top: none; }
+.team-card-page { border-right: var(--border-thick); border-bottom: var(--border-thick); padding: 32px 20px; background: var(--white); text-align: center; transition: all 0.1s; cursor: crosshair; }
+.team-card-page:hover { background: var(--black); color: var(--white); transform: translate(-3px,-3px); box-shadow: var(--shadow-lg); z-index: 2; }
+.team-card-page:hover .team-role { color: var(--grey-mid); }
+.team-card-page:hover .team-avatar { background: var(--grey-dark); border-color: var(--grey-mid); }
+.team-card-page:hover .team-link-btn { border-color: var(--grey-dark); color: var(--white); }
+
+/* COMPETITIONS PAGE */
+.comp-page { padding: 0 48px 80px; background: var(--off-white); }
+.comp-block { margin-top: 48px; border: var(--border-thick); }
+.comp-block-header { background: var(--black); padding: 40px 44px; border-bottom: var(--border-thick); display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.comp-block-title { font-family: var(--font-display); font-size: 64px; letter-spacing: 2px; color: var(--white); line-height: 1; }
+.comp-block-subtitle { font-family: var(--font-mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-mid); margin-top: 8px; }
+.comp-block-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.comp-block-left { padding: 44px; border-right: var(--border-thick); }
+.comp-block-right { padding: 44px; background: var(--paper); }
+.comp-info-row { margin-bottom: 28px; }
+.comp-info-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 6px; }
+.comp-info-value { font-size: 13px; color: var(--black); line-height: 1.7; }
+.comp-result-tag { display: inline-flex; align-items: center; gap: 10px; border: var(--border-thick); padding: 10px 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: var(--black); color: var(--white); box-shadow: var(--shadow); margin-bottom: 28px; }
+.comp-tasks-title { font-family: var(--font-display); font-size: 20px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; border-bottom: var(--border); padding-bottom: 12px; }
+.comp-tasks-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.comp-task-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: var(--border); font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; background: var(--white); transition: all 0.1s; cursor: default; }
+.comp-task-item:hover { background: var(--black); color: var(--white); border-color: var(--black); transform: translateX(4px); }
+.comp-task-item::before { content: '->'; font-size: 12px; }
+
+/* GALLERY */
+.gallery-page { padding: 0 48px 80px; background: var(--paper); }
+.gallery-tabs { display: flex; gap: 0; margin-top: 48px; border: var(--border-thick); }
+.gallery-tab { flex: 1; padding: 14px 10px; text-align: center; font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; border-right: var(--border-thick); cursor: crosshair; transition: all 0.1s; background: var(--white); }
+.gallery-tab:last-child { border-right: none; }
+.gallery-tab:hover, .gallery-tab.active { background: var(--black); color: var(--white); }
+.gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); grid-auto-rows: 220px; gap: 0; border: var(--border-thick); border-top: none; }
+.gallery-item { border-right: var(--border-thick); border-bottom: var(--border-thick); background: var(--white); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: crosshair; transition: all 0.15s; }
+.gallery-item:nth-child(3n) { border-right: none; }
+.gallery-item:hover { background: var(--black); z-index: 2; transform: scale(1.02); box-shadow: var(--shadow-xl); }
+.gallery-item.span-2 { grid-column: span 2; }
+.gallery-item.span-row { grid-row: span 2; }
+.gallery-item-bg { font-family: var(--font-display); font-size: 80px; opacity: 0.08; letter-spacing: -5px; position: absolute; user-select: none; }
+.gallery-item:hover .gallery-item-bg { opacity: 0.04; color: var(--white); }
+.gallery-item-label { position: absolute; bottom: 0; left: 0; right: 0; background: var(--black); color: var(--white); font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 14px; transform: translateY(100%); transition: transform 0.2s ease; border-top: var(--border); }
+.gallery-item:hover .gallery-item-label { transform: translateY(0); }
+.gallery-item-num { font-family: var(--font-display); font-size: 80px; color: rgba(0,0,0,0.06); line-height: 1; position: absolute; bottom: 0; right: 10px; }
+.gallery-item:hover .gallery-item-num { color: rgba(255,255,255,0.04); }
+
+/* SPONSORS */
+.sponsors-page { padding: 0 48px 80px; background: var(--off-white); }
+.sponsors-tier { margin-top: 48px; }
+.tier-header { display: flex; align-items: center; gap: 0; border: var(--border-thick); }
+.tier-badge { font-family: var(--font-display); font-size: 18px; letter-spacing: 3px; text-transform: uppercase; padding: 12px 28px; border-right: var(--border-thick); }
+.tier-gold-bg { background: var(--black); color: var(--white); }
+.tier-silver-bg { background: var(--grey-dark); color: var(--white); }
+.tier-bronze-bg { background: var(--off-white); color: var(--black); }
+.tier-desc { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--grey-mid); padding: 12px 20px; }
+.sponsors-grid { display: flex; flex-wrap: wrap; gap: 0; border: var(--border-thick); border-top: none; margin-bottom: 48px; }
+.sponsor-card { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: crosshair; transition: all 0.1s; border-right: var(--border-thick); background: var(--white); gap: 10px; }
+.sponsor-card.lg { width: 200px; height: 120px; }
+.sponsor-card.md { width: 160px; height: 100px; }
+.sponsor-card.sm { width: 130px; height: 80px; }
+.sponsor-card:hover { background: var(--black); color: var(--white); transform: translate(-3px,-3px); box-shadow: var(--shadow-lg); z-index: 2; }
+.sponsor-card:hover .sponsor-name { color: var(--grey-mid); }
+.sponsor-logo { font-size: 24px; opacity: 0.4; }
+.sponsor-name { font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--grey-mid); }
+.sponsor-cta { border: var(--border-thick); padding: 60px; text-align: center; background: var(--black); box-shadow: var(--shadow-xl); position: relative; margin-top: 48px; }
+.sponsor-cta-title { font-family: var(--font-display); font-size: 48px; letter-spacing: 2px; text-transform: uppercase; color: var(--white); margin-bottom: 16px; }
+.sponsor-cta-desc { font-size: 13px; color: var(--grey-mid); margin-bottom: 32px; line-height: 1.8; }
+
+/* CONTACT */
+.contact-page { padding: 0 48px 80px; background: var(--paper); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: var(--border-thick); margin-top: 48px; }
+.contact-left { border-right: var(--border-thick); display: flex; flex-direction: column; gap: 0; }
+.contact-item { padding: 28px 32px; border-bottom: var(--border-thick); display: flex; align-items: flex-start; gap: 16px; cursor: crosshair; transition: all 0.1s; background: var(--white); }
+.contact-item:last-child { border-bottom: none; }
+.contact-item:hover { background: var(--black); color: var(--white); transform: translateX(-3px); box-shadow: 5px 0 0 var(--black); }
+.contact-item:hover .contact-label { color: var(--grey-mid); }
+.contact-item:hover .contact-handle { color: var(--grey-mid); }
+.contact-icon { font-size: 22px; flex-shrink: 0; padding-top: 2px; }
+.contact-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 5px; }
+.contact-value { font-family: var(--font-display); font-size: 18px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.contact-handle { font-family: var(--font-body); font-size: 11px; color: var(--grey-dark); }
+.contact-right { padding: 44px; background: var(--off-white); }
+.form-title { font-family: var(--font-display); font-size: 28px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 32px; border-bottom: var(--border-thick); padding-bottom: 16px; }
+.form-group { margin-bottom: 18px; }
+.form-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 8px; display: block; }
+.form-input, .form-textarea { width: 100%; background: var(--white); border: var(--border-thick); padding: 12px 16px; font-family: var(--font-body); font-size: 13px; color: var(--black); outline: none; transition: all 0.1s; box-shadow: var(--shadow); }
+.form-input:focus, .form-textarea:focus { box-shadow: var(--shadow-lg); transform: translate(-2px,-2px); }
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-submit { width: 100%; padding: 16px; background: var(--black); color: var(--white); font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; border: var(--border-thick); box-shadow: var(--shadow-lg); cursor: crosshair; transition: all 0.1s; }
+.form-submit:hover { background: var(--off-white); color: var(--black); transform: translate(-3px,-3px); box-shadow: var(--shadow-xl); }
+
+/* ANIMATIONS */
+@keyframes slide-up { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.hero-center { animation: slide-up 0.8s cubic-bezier(0.16,1,0.3,1) both; }
+.hero-stats-bar { animation: slide-up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .achievements-grid { grid-template-columns: repeat(2,1fr); }
+  .achievement-card { border-right: var(--border-thick); border-bottom: none; }
+  .achievement-card:nth-child(2n) { border-right: none; }
+  .achievement-card:nth-child(n+3) { border-top: var(--border-thick); }
+  .team-preview-grid { grid-template-columns: repeat(3,1fr); }
+  .team-card:nth-child(3) { border-right: none; }
+  .team-card:nth-child(4) { border-top: var(--border-thick); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-col:nth-child(2n) { border-right: none; }
+  .footer-col:nth-child(n+3) { border-top: 3px solid var(--grey-dark); }
+}
+@media (max-width: 900px) {
+  .hero-stats-bar { grid-template-columns: repeat(2,1fr); }
+  .hero-stat-col:nth-child(2) { border-right: none; }
+  .hero-stat-col:nth-child(3) { border-top: 1px solid var(--grey-dark); }
+  .hero-stat-col:nth-child(4) { border-top: 1px solid var(--grey-dark); border-right: none; }
+  .about { grid-template-columns: 1fr; }
+  .about-img-side { min-height: 260px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card { border-right: none; }
+  .competitions-grid { grid-template-columns: 1fr; }
+  .competition-card { border-right: none; border-bottom: 3px solid var(--white); }
+  .competition-card:last-child { border-bottom: none; }
+  .nav-links, .nav-cta { display: none; }
+  .hamburger { display: flex; }
+  .team-preview-grid { grid-template-columns: repeat(2,1fr); }
+  .team-card:nth-child(2n) { border-right: none; }
+  .comp-block-body { grid-template-columns: 1fr; }
+  .comp-block-right { border-top: var(--border-thick); }
+  .comp-block-left { border-right: none; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-left { border-right: none; border-bottom: var(--border-thick); }
+  .gallery-grid { grid-template-columns: repeat(2,1fr); }
+  .gallery-item.span-2 { grid-column: span 1; }
+  section, .projects-page, .team-page-content, .comp-page, .gallery-page, .sponsors-page, .contact-page, .page-banner, .achievements, .team-preview, .projects-section, .competitions-section { padding-left: 20px; padding-right: 20px; }
+  nav { padding: 0 20px; }
+  .projects-page-grid { grid-template-columns: repeat(2,1fr); }
+  .proj-page-card:nth-child(3n) { border-right: var(--border-thick); }
+  .proj-page-card:nth-child(2n) { border-right: none; }
+}
+@media (max-width: 600px) {
+  .hero-title-top, .hero-title-bottom { font-size: 64px; }
+  .hero-logo-block { width: 90px; height: 90px; }
+  .hero-logo-block-inner { font-size: 42px; }
+  .hero-stats-bar { grid-template-columns: repeat(2,1fr); }
+  .achievements-grid { grid-template-columns: 1fr; }
+  .achievement-card { border-right: var(--border-thick); border-bottom: none; border-top: none; }
+  .achievement-card:first-child { border-top: var(--border-thick); }
+  .achievement-card:last-child { border-bottom: var(--border-thick); }
+  .projects-page-grid { grid-template-columns: 1fr; }
+  .proj-page-card:nth-child(n) { border-right: none; }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-item { border-right: none; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-col { border-right: none; border-bottom: 3px solid var(--grey-dark); }
+  .footer-col:last-child { border-bottom: none; }
+  .hero-buttons { flex-direction: column; }
+  .btn-brutal { justify-content: center; }
+  .team-preview-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-mark">D</div>
+    <div class="nav-logo-text">Dreadnought</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('projects')" id="nav-projects">Projects</a></li>
+    <li><a href="#" onclick="showPage('competitions')" id="nav-competitions">Competitions</a></li>
+    <li><a href="#" onclick="showPage('team')" id="nav-team">Team</a></li>
+    <li><a href="#" onclick="showPage('gallery')" id="nav-gallery">Gallery</a></li>
+    <li><a href="#" onclick="showPage('sponsors')" id="nav-sponsors">Sponsors</a></li>
+    <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showPage('contact')">Join Us</a>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#" onclick="showPage('home');toggleMenu()">Home</a>
+  <a href="#" onclick="showPage('projects');toggleMenu()">Projects</a>
+  <a href="#" onclick="showPage('competitions');toggleMenu()">Competitions</a>
+  <a href="#" onclick="showPage('team');toggleMenu()">Team</a>
+  <a href="#" onclick="showPage('gallery');toggleMenu()">Gallery</a>
+  <a href="#" onclick="showPage('sponsors');toggleMenu()">Sponsors</a>
+  <a href="#" onclick="showPage('contact');toggleMenu()">Contact</a>
+</div>
+
+<!-- ====== HOME ====== -->
+<div id="page-home" class="page active">
+<div class="hero">
+  <div class="hero-center">
+    <div class="hero-eyebrow">VIT Chennai &middot; Autonomous Robotics &middot; Est. 2019</div>
+    <div class="hero-logo-block">
+      <div class="hero-logo-block-inner">DR</div>
+    </div>
+    <span class="hero-title-top">DREADNOUGHT</span>
+    <span class="hero-title-bottom">ROBOTICS</span>
+    <p class="hero-sub">Autonomous Underwater Robotics Team &mdash; Building intelligent machines for international competition.</p>
+    <div class="hero-buttons">
+      <button class="btn-brutal white" onclick="showPage('projects')">View Projects &rarr;</button>
+      <button class="btn-brutal outline" onclick="showPage('team')">Meet the Team</button>
+    </div>
+  </div>
+  <div class="hero-stats-bar">
+    <div class="hero-stat-col"><div class="hero-stat-num">4+</div><div class="hero-stat-label">Years Active</div><div class="hero-stat-desc">Building since 2019</div></div>
+    <div class="hero-stat-col"><div class="hero-stat-num">50+</div><div class="hero-stat-label">Team Members</div><div class="hero-stat-desc">Across all disciplines</div></div>
+    <div class="hero-stat-col"><div class="hero-stat-num">06</div><div class="hero-stat-label">Competitions</div><div class="hero-stat-desc">National + International</div></div>
+    <div class="hero-stat-col"><div class="hero-stat-num">03</div><div class="hero-stat-label">AUV Builds</div><div class="hero-stat-desc">Full system iterations</div></div>
+  </div>
+</div>
+
+<section class="achievements">
+  <div class="section-inner">
+    <div class="section-header">
+      <div><div class="section-label">Recognition</div><div class="section-title">ACHIEVE<span class="inv">MENTS</span></div></div>
+      <div class="section-num">01</div>
+    </div>
+    <div class="achievements-grid">
+      <div class="achievement-card"><span class="achievement-icon">&#x1F948;</span><div class="achievement-year">2023</div><div class="achievement-rank">Runner-Up</div><div class="achievement-title">TAC Autonomy Challenge</div><div class="achievement-desc">Secured second place among top engineering teams in India competing in autonomous systems.</div></div>
+      <div class="achievement-card"><span class="achievement-icon">&#x1F30F;</span><div class="achievement-year">2023</div><div class="achievement-rank">International Selection</div><div class="achievement-title">SAUVC Singapore</div><div class="achievement-desc">Selected to represent VIT Chennai at the Singapore Autonomous Underwater Vehicle Challenge.</div></div>
+      <div class="achievement-card"><span class="achievement-icon">&#x1F3C6;</span><div class="achievement-year">2022</div><div class="achievement-rank">National Recognition</div><div class="achievement-title">National Robotics Summit</div><div class="achievement-desc">Recognized for excellence in underwater robotics design and autonomous navigation systems.</div></div>
+      <div class="achievement-card"><span class="achievement-icon">&#x1F52C;</span><div class="achievement-year">2022&ndash;24</div><div class="achievement-rank">Research &amp; Innovation</div><div class="achievement-title">Published Research</div><div class="achievement-desc">Team members contributed peer-reviewed publications in robotics, CV, and embedded systems.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="about">
+  <div class="about-img-side">
+    <div class="about-img-placeholder-neo">AUV<br>MIRA<br>2023</div>
+    <div class="about-img-label">Team Photo &mdash; SAUVC Preparation</div>
+  </div>
+  <div class="about-content-side">
+    <div class="section-label">Who We Are</div>
+    <div class="section-title" style="font-size:clamp(40px,4vw,60px);margin-bottom:28px;">ABOUT<br><span class="inv">THE TEAM</span></div>
+    <p class="about-text primary">Dreadnought Robotics is a student-led autonomous systems team at VIT Chennai focused on building AUVs for international competitions.</p>
+    <p class="about-text">Our interdisciplinary crew brings together robotics, AI, computer vision, embedded systems, and mechanical design. We operate at the intersection of research and engineering.</p>
+    <p class="about-text">From concept to competition pool &mdash; every AUV represents hundreds of hours of design, simulation, testing, and iteration.</p>
+    <div class="about-tags">
+      <span class="about-tag">Robotics</span><span class="about-tag">Computer Vision</span>
+      <span class="about-tag">Embedded Systems</span><span class="about-tag">Mechanical Design</span>
+      <span class="about-tag">AI / Deep Learning</span><span class="about-tag">Control Systems</span>
+    </div>
+    <div style="margin-top:36px;"><button class="btn-brutal dark" onclick="showPage('team')">Meet the Team &rarr;</button></div>
+  </div>
+</div>
+
+<section class="projects-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div><div class="section-label">Engineering</div><div class="section-title">FEATURED<br><span class="inv">PROJECTS</span></div></div>
+      <div class="section-num">02</div>
+    </div>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card" onclick="showPage('projects')"><div class="project-img-neo"><div class="project-img-neo-bg">AUV</div><div class="project-img-badge">Flagship &middot; AUV</div><div class="project-num">01</div></div><div class="project-content-inner"><div class="project-title">MIRA AUV</div><div class="project-desc">Full competition AUV with 6-DOF control, stereo vision, DVL-IMU navigation. Built for SAUVC tasks.</div><div class="project-tags"><span class="project-tag">ROS2</span><span class="project-tag">Computer Vision</span><span class="project-tag">SLAM</span></div><a class="project-link">View Project &rarr;</a></div></div>
+    <div class="project-card" onclick="showPage('projects')"><div class="project-img-neo"><div class="project-img-neo-bg">ARM</div><div class="project-img-badge">Manipulation</div><div class="project-num">02</div></div><div class="project-content-inner"><div class="project-title">Dexterous Arm</div><div class="project-desc">7-DOF underwater manipulator with force feedback for competition object retrieval.</div><div class="project-tags"><span class="project-tag">Servo Control</span><span class="project-tag">MoveIt2</span><span class="project-tag">Force Sensing</span></div><a class="project-link">View Project &rarr;</a></div></div>
+    <div class="project-card" onclick="showPage('projects')"><div class="project-img-neo"><div class="project-img-neo-bg">CV</div><div class="project-img-badge">AI / Vision</div><div class="project-num">03</div></div><div class="project-content-inner"><div class="project-title">CV Pipeline</div><div class="project-desc">Real-time underwater object detection using custom YOLOv8 models for competition task recognition.</div><div class="project-tags"><span class="project-tag">YOLOv8</span><span class="project-tag">PyTorch</span><span class="project-tag">TensorRT</span></div><a class="project-link">View Project &rarr;</a></div></div>
+    <div class="project-card" onclick="showPage('projects')"><div class="project-img-neo"><div class="project-img-neo-bg">NAV</div><div class="project-img-badge">Navigation</div><div class="project-num">04</div></div><div class="project-content-inner"><div class="project-title">Navigation Stack</div><div class="project-desc">Multi-sensor fusion combining DVL, IMU, and pressure sensors with EKF for &lt;5cm positioning.</div><div class="project-tags"><span class="project-tag">EKF</span><span class="project-tag">DVL</span><span class="project-tag">IMU Fusion</span></div><a class="project-link">View Project &rarr;</a></div></div>
+  </div>
+  <div style="padding:40px 48px 0;max-width:1280px;margin:0 auto;"><button class="btn-brutal dark" onclick="showPage('projects')">View All Projects &rarr;</button></div>
+</section>
+
+<section class="competitions-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div><div class="section-label">Where We Compete</div><div class="section-title" style="color:var(--white);">COMPE<span style="background:var(--white);color:var(--black);padding:0 6px;">TITIONS</span></div></div>
+      <div class="section-num" style="color:var(--grey-dark);">03</div>
+    </div>
+    <div class="competitions-grid">
+      <div class="competition-card" onclick="showPage('competitions')">
+        <div class="competition-header"><div><div class="competition-header-title">SAUVC</div><div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">Singapore &middot; International</div></div><div class="competition-flag">&#x1F30A;</div></div>
+        <div class="competition-content"><div class="competition-name">Singapore AUV Challenge</div><div class="competition-location">&#x1F4CD; Singapore &middot; Annual</div><div class="competition-desc">Asia's most prestigious AUV competition. Zero human intervention during autonomous mission runs.</div><div class="competition-result">&#x2713; Selected &mdash; 2023</div></div>
+      </div>
+      <div class="competition-card" onclick="showPage('competitions')">
+        <div class="competition-header"><div><div class="competition-header-title">TAC</div><div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">India &middot; National</div></div><div class="competition-flag">&#x2699;&#xFE0F;</div></div>
+        <div class="competition-content"><div class="competition-name">TAC Autonomy Challenge</div><div class="competition-location">&#x1F4CD; India &middot; National</div><div class="competition-desc">India's premier autonomous systems challenge. Teams from IITs, NITs, and top engineering institutes.</div><div class="competition-result">&#x1F948; Runner-Up &mdash; 2023</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team-preview">
+  <div class="section-inner">
+    <div class="section-header">
+      <div><div class="section-label">The People</div><div class="section-title">CORE<br><span class="inv">TEAM</span></div></div>
+      <div class="section-num">04</div>
+    </div>
+    <div class="team-preview-grid">
+      <div class="team-card"><div class="team-avatar">&#x1F468;&#x200D;&#x1F4BB;</div><div class="team-name">Aryan Mehta</div><div class="team-role">Team Captain</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+      <div class="team-card"><div class="team-avatar">&#x1F469;&#x200D;&#x1F52C;</div><div class="team-name">Priya Nair</div><div class="team-role">AI &amp; CV Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+      <div class="team-card"><div class="team-avatar">&#x1F468;&#x200D;&#x1F527;</div><div class="team-name">Karthik Rajan</div><div class="team-role">Mechanical Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+      <div class="team-card"><div class="team-avatar">&#x1F469;&#x200D;&#x1F4BB;</div><div class="team-name">Shreya Iyer</div><div class="team-role">Embedded Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+      <div class="team-card"><div class="team-avatar">&#x1F468;&#x200D;&#x1F3EB;</div><div class="team-name">Dev Krishnan</div><div class="team-role">Software Arch.</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+      <div class="team-card"><div class="team-avatar">&#x1F469;&#x200D;&#x1F527;</div><div class="team-name">Ananya Sharma</div><div class="team-role">Controls Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    </div>
+    <div style="margin-top:40px;"><button class="btn-brutal dark" onclick="showPage('team')">View Full Team &rarr;</button></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col"><div class="footer-brand-name">DREADNOUGHT</div><p class="footer-tagline">Autonomous Underwater Robotics Team at VIT Chennai. Building intelligent machines for the world beneath the surface.</p><div class="footer-socials"><div class="footer-social">&#x1F4F8;</div><div class="footer-social">&#x1F4BC;</div><div class="footer-social">&#x2328;</div><div class="footer-social">&#x25B6;</div></div></div>
+    <div class="footer-col"><div class="footer-col-title">Navigate</div><ul class="footer-links"><li><a href="#" onclick="showPage('home')">Home</a></li><li><a href="#" onclick="showPage('projects')">Projects</a></li><li><a href="#" onclick="showPage('competitions')">Competitions</a></li><li><a href="#" onclick="showPage('team')">Team</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Connect</div><ul class="footer-links"><li><a href="#" onclick="showPage('gallery')">Gallery</a></li><li><a href="#" onclick="showPage('sponsors')">Sponsors</a></li><li><a href="#" onclick="showPage('contact')">Contact</a></li></ul></div>
+    <div class="footer-col"><div class="footer-col-title">Location</div><ul class="footer-links"><li><a href="#">VIT Chennai</a></li><li><a href="#">Vandalur&ndash;Kelambakkam Rd</a></li><li><a href="#">Chennai, TN 600127</a></li><li><a href="#">India</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span> &middot; VIT Chennai. All rights reserved.</div><div class="footer-copy" style="font-size:10px;">Built with discipline by the team.</div></div>
+</footer>
+</div>
+
+<!-- ====== PROJECTS ====== -->
+<div id="page-projects" class="page">
+<div class="page-banner"><div class="page-banner-sub">Engineering Work</div><h1 class="page-banner-title">OUR <span class="stroke">PROJECTS</span></h1><p class="page-banner-desc">Full AUV builds to specialized subsystem R&amp;D &mdash; each project advances our capability.</p><div class="page-banner-num">02</div></div>
+<div class="projects-page">
+  <div class="projects-page-grid">
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">AUV</div><div class="project-img-badge">Flagship</div><div class="project-num">01</div></div><div class="project-content-inner"><div class="project-title">MIRA AUV</div><div class="project-desc">8 thruster 6-DOF control, custom waterproof electronics, stereo vision, DVL-IMU navigation. Built for SAUVC tasks including gate navigation, buoy targeting, and torpedo firing.</div><div class="project-tags"><span class="project-tag">ROS2</span><span class="project-tag">C++</span><span class="project-tag">Python</span><span class="project-tag">SLAM</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">ARM</div><div class="project-img-badge">Manipulation</div><div class="project-num">02</div></div><div class="project-content-inner"><div class="project-title">Dexterous Arm</div><div class="project-desc">7-DOF underwater manipulator with compliant force feedback. Custom servo controllers integrated with MIRA for competition manipulation challenges.</div><div class="project-tags"><span class="project-tag">Servo Control</span><span class="project-tag">Force Sensing</span><span class="project-tag">MoveIt2</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">CV</div><div class="project-img-badge">AI / Vision</div><div class="project-num">03</div></div><div class="project-content-inner"><div class="project-title">CV Detection Pipeline</div><div class="project-desc">Real-time underwater detection and segmentation. Custom YOLOv8 models trained for gates, buoys, and markers in variable visibility conditions.</div><div class="project-tags"><span class="project-tag">YOLOv8</span><span class="project-tag">PyTorch</span><span class="project-tag">OpenCV</span><span class="project-tag">TensorRT</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">NAV</div><div class="project-img-badge">Navigation</div><div class="project-num">04</div></div><div class="project-content-inner"><div class="project-title">Navigation Stack</div><div class="project-desc">Sensor fusion combining DVL velocity, IMU orientation, pressure depth. Extended Kalman Filter for state estimation with &lt;5cm position accuracy.</div><div class="project-tags"><span class="project-tag">EKF</span><span class="project-tag">DVL</span><span class="project-tag">IMU Fusion</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">PCB</div><div class="project-img-badge">Hardware</div><div class="project-num">05</div></div><div class="project-content-inner"><div class="project-title">Power &amp; Electronics PCB</div><div class="project-desc">Custom power distribution and control board. LiPo BMS, thruster ESC control, kill switch, leak detection, and full sensor data logging.</div><div class="project-tags"><span class="project-tag">PCB Design</span><span class="project-tag">KiCad</span><span class="project-tag">STM32</span><span class="project-tag">BMS</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+    <div class="proj-page-card"><div class="project-img-neo"><div class="project-img-neo-bg">SIM</div><div class="project-img-badge">Simulation</div><div class="project-num">06</div></div><div class="project-content-inner"><div class="project-title">Gazebo Simulation</div><div class="project-desc">High-fidelity Gazebo environment for MIRA testing. Hydrodynamic modeling, underwater rendering, and full sensor simulation for pre-pool validation.</div><div class="project-tags"><span class="project-tag">Gazebo</span><span class="project-tag">ROS2</span><span class="project-tag">URDF</span><span class="project-tag">Hydrodynamics</span></div><a class="project-link" href="#">GitHub &rarr;</a></div></div>
+  </div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<!-- ====== COMPETITIONS ====== -->
+<div id="page-competitions" class="page">
+<div class="page-banner"><div class="page-banner-sub">Where We Compete</div><h1 class="page-banner-title"><span class="stroke">COMPE</span>TITIONS</h1><p class="page-banner-desc">Representing VIT Chennai on international and national stages against the best in the world.</p><div class="page-banner-num">03</div></div>
+<div class="comp-page">
+  <div class="comp-block">
+    <div class="comp-block-header"><div><div class="comp-block-title">SAUVC</div><div class="comp-block-subtitle">Singapore Autonomous Underwater Vehicle Challenge</div></div><div style="font-family:var(--font-display);font-size:80px;color:rgba(255,255,255,0.12);">&#x1F30A;</div></div>
+    <div class="comp-block-body">
+      <div class="comp-block-left"><div class="comp-result-tag">&#x2713; Selected to Compete &mdash; 2023</div><div class="comp-info-row"><div class="comp-info-label">Full Name</div><div class="comp-info-value">Singapore Autonomous Underwater Vehicle Challenge</div></div><div class="comp-info-row"><div class="comp-info-label">Location</div><div class="comp-info-value">Singapore &middot; Annual International Competition</div></div><div class="comp-info-row"><div class="comp-info-label">About</div><div class="comp-info-value">Asia's most prestigious AUV competition. Teams from universities globally must complete all missions fully autonomously &mdash; zero human intervention during runs.</div></div></div>
+      <div class="comp-block-right"><div class="comp-tasks-title">Competition Tasks</div><ul class="comp-tasks-list"><li class="comp-task-item">Gate Navigation</li><li class="comp-task-item">Buoy Targeting &amp; Touching</li><li class="comp-task-item">Torpedo Firing</li><li class="comp-task-item">Object Dropping into Bins</li><li class="comp-task-item">Acoustic Homing</li><li class="comp-task-item">Position Hold</li></ul></div>
+    </div>
+  </div>
+  <div class="comp-block" style="margin-top:32px;">
+    <div class="comp-block-header"><div><div class="comp-block-title">TAC</div><div class="comp-block-subtitle">TAC Autonomy Challenge &mdash; India</div></div><div style="font-family:var(--font-display);font-size:80px;color:rgba(255,255,255,0.12);">&#x2699;&#xFE0F;</div></div>
+    <div class="comp-block-body">
+      <div class="comp-block-left"><div class="comp-result-tag">&#x1F948; Runner-Up &mdash; 2023</div><div class="comp-info-row"><div class="comp-info-label">Full Name</div><div class="comp-info-value">TAC Autonomy Challenge</div></div><div class="comp-info-row"><div class="comp-info-label">Location</div><div class="comp-info-value">India &middot; Annual National Competition</div></div><div class="comp-info-row"><div class="comp-info-label">About</div><div class="comp-info-value">India's premier autonomous systems challenge. Attracts teams from IITs, NITs, and top engineering institutions. Dreadnought secured Runner-Up in the underwater category in 2023.</div></div></div>
+      <div class="comp-block-right"><div class="comp-tasks-title">Competition Tasks</div><ul class="comp-tasks-list"><li class="comp-task-item">Autonomous Navigation</li><li class="comp-task-item">Underwater Object Detection</li><li class="comp-task-item">Waypoint Following</li><li class="comp-task-item">System Integration Judging</li></ul></div>
+    </div>
+  </div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<!-- ====== TEAM ====== -->
+<div id="page-team" class="page">
+<div class="page-banner"><div class="page-banner-sub">The People</div><h1 class="page-banner-title">THE <span class="stroke">TEAM</span></h1><p class="page-banner-desc">50+ engineers, researchers, and builders united by a shared obsession with autonomous systems.</p><div class="page-banner-num">04</div></div>
+<div class="team-page-content">
+  <div class="team-divider"><div class="team-divider-title">Core Board</div><div class="team-divider-badge">Leadership &middot; 5 Members</div></div>
+  <div class="team-page-grid">
+    <div class="team-card-page"><div class="team-avatar" style="width:80px;height:80px;font-size:32px;margin-bottom:16px;">&#x1F468;&#x200D;&#x1F4BB;</div><div class="team-name">Aryan Mehta</div><div class="team-role">Team Captain</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:80px;height:80px;font-size:32px;margin-bottom:16px;">&#x1F469;&#x200D;&#x1F52C;</div><div class="team-name">Priya Nair</div><div class="team-role">AI &amp; CV Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:80px;height:80px;font-size:32px;margin-bottom:16px;">&#x1F468;&#x200D;&#x1F527;</div><div class="team-name">Karthik Rajan</div><div class="team-role">Mechanical Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:80px;height:80px;font-size:32px;margin-bottom:16px;">&#x1F469;&#x200D;&#x1F4BB;</div><div class="team-name">Shreya Iyer</div><div class="team-role">Embedded Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:80px;height:80px;font-size:32px;margin-bottom:16px;">&#x1F468;&#x200D;&#x1F3EB;</div><div class="team-name">Dev Krishnan</div><div class="team-role">Software Arch.</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+  </div>
+  <div class="team-divider" style="margin-top:48px;"><div class="team-divider-title">Board Members</div><div class="team-divider-badge">Domain Leads &middot; 6 Members</div></div>
+  <div class="team-page-grid">
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F469;&#x200D;&#x1F527;</div><div class="team-name">Ananya Sharma</div><div class="team-role">Controls Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F468;&#x200D;&#x1F3A8;</div><div class="team-name">Rohan Pillai</div><div class="team-role">CAD &amp; Design Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F469;&#x200D;&#x1F52C;</div><div class="team-name">Meera Subramanian</div><div class="team-role">Navigation Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F468;&#x200D;&#x1F4BC;</div><div class="team-name">Vishal Kumar</div><div class="team-role">Operations</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F469;&#x200D;&#x1F4BC;</div><div class="team-name">Neha Varma</div><div class="team-role">Sponsorship Lead</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:72px;height:72px;font-size:26px;margin-bottom:14px;">&#x1F468;&#x200D;&#x1F52C;</div><div class="team-name">Akash Reddy</div><div class="team-role">Electronics Lead</div><div class="team-links"><div class="team-link-btn">in</div><div class="team-link-btn">gh</div></div></div>
+  </div>
+  <div class="team-divider" style="margin-top:48px;"><div class="team-divider-title">Members</div><div class="team-divider-badge">Full Team &middot; 40+ Members</div></div>
+  <div class="team-page-grid">
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Rahul Singh</div><div class="team-role">Software Dev</div><div class="team-links"><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Kavya Menon</div><div class="team-role">CV Engineer</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Siddharth Joshi</div><div class="team-role">Mech. Eng.</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Tanvi Patel</div><div class="team-role">Embedded Dev</div><div class="team-links"><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Aditya Rao</div><div class="team-role">Control Systems</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Ishaan Kapoor</div><div class="team-role">Simulation Eng.</div><div class="team-links"><div class="team-link-btn">gh</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Riya Desai</div><div class="team-role">PCB Design</div><div class="team-links"><div class="team-link-btn">in</div></div></div>
+    <div class="team-card-page"><div class="team-avatar" style="width:60px;height:60px;font-size:20px;margin-bottom:12px;">&#x1F464;</div><div class="team-name">Vikram Nair</div><div class="team-role">ML Engineer</div><div class="team-links"><div class="team-link-btn">gh</div></div></div>
+  </div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<!-- ====== GALLERY ====== -->
+<div id="page-gallery" class="page">
+<div class="page-banner"><div class="page-banner-sub">Visual Archive</div><h1 class="page-banner-title">THE <span class="stroke">GALLERY</span></h1><p class="page-banner-desc">Competitions, pool tests, workshops, and the moments that define Dreadnought Robotics.</p><div class="page-banner-num">05</div></div>
+<div class="gallery-page">
+  <div class="gallery-tabs">
+    <div class="gallery-tab active" onclick="filterGallery('all',this)">All</div>
+    <div class="gallery-tab" onclick="filterGallery('competition',this)">Competitions</div>
+    <div class="gallery-tab" onclick="filterGallery('robot',this)">Robots</div>
+    <div class="gallery-tab" onclick="filterGallery('team',this)">Team</div>
+    <div class="gallery-tab" onclick="filterGallery('testing',this)">Testing</div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item span-2" data-cat="competition"><div class="gallery-item-bg">SAUVC</div><div class="gallery-item-num">01</div><div class="gallery-item-label">SAUVC 2023 &middot; Singapore Competition</div></div>
+    <div class="gallery-item span-row" data-cat="robot"><div class="gallery-item-bg">MIRA</div><div class="gallery-item-num">02</div><div class="gallery-item-label">MIRA AUV &middot; Final Build</div></div>
+    <div class="gallery-item" data-cat="testing"><div class="gallery-item-bg">TEST</div><div class="gallery-item-num">03</div><div class="gallery-item-label">Pool Testing Session</div></div>
+    <div class="gallery-item" data-cat="team"><div class="gallery-item-bg">TEAM</div><div class="gallery-item-num">04</div><div class="gallery-item-label">Team Photograph 2023</div></div>
+    <div class="gallery-item" data-cat="competition"><div class="gallery-item-bg">TAC</div><div class="gallery-item-num">05</div><div class="gallery-item-label">TAC &middot; Runner-Up Ceremony</div></div>
+    <div class="gallery-item" data-cat="robot"><div class="gallery-item-bg">ARM</div><div class="gallery-item-num">06</div><div class="gallery-item-label">Robotic Arm &middot; Test Rig</div></div>
+    <div class="gallery-item span-2" data-cat="testing"><div class="gallery-item-bg">BUILD</div><div class="gallery-item-num">07</div><div class="gallery-item-label">Workshop &middot; Electronics Assembly</div></div>
+    <div class="gallery-item" data-cat="team"><div class="gallery-item-bg">NEW</div><div class="gallery-item-num">08</div><div class="gallery-item-label">Induction Day &middot; New Members 2024</div></div>
+  </div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<!-- ====== SPONSORS ====== -->
+<div id="page-sponsors" class="page">
+<div class="page-banner"><div class="page-banner-sub">Our Partners</div><h1 class="page-banner-title">OUR <span class="stroke">SPONSORS</span></h1><p class="page-banner-desc">The organizations that make our work possible. Their support enables us to compete and build.</p><div class="page-banner-num">06</div></div>
+<div class="sponsors-page">
+  <div class="sponsors-tier"><div class="tier-header"><div class="tier-badge tier-gold-bg">Gold Partners</div><div class="tier-desc">Primary sponsors &middot; Maximum visibility</div></div><div class="sponsors-grid"><div class="sponsor-card lg"><div class="sponsor-logo">&#x1F3ED;</div><div class="sponsor-name">Sponsor Co.</div></div><div class="sponsor-card lg"><div class="sponsor-logo">&#x2699;&#xFE0F;</div><div class="sponsor-name">Tech Systems</div></div><div class="sponsor-card lg"><div class="sponsor-logo">&#x1F52C;</div><div class="sponsor-name">Research Labs</div></div></div></div>
+  <div class="sponsors-tier"><div class="tier-header"><div class="tier-badge tier-silver-bg">Silver Partners</div><div class="tier-desc">Secondary sponsors &middot; High visibility</div></div><div class="sponsors-grid"><div class="sponsor-card md"><div class="sponsor-logo">&#x1F4BB;</div><div class="sponsor-name">DevTech</div></div><div class="sponsor-card md"><div class="sponsor-logo">&#x1F50C;</div><div class="sponsor-name">ElectroParts</div></div><div class="sponsor-card md"><div class="sponsor-logo">&#x1F6E0;</div><div class="sponsor-name">Fabricate</div></div><div class="sponsor-card md"><div class="sponsor-logo">&#x1F4E1;</div><div class="sponsor-name">SignalCo</div></div></div></div>
+  <div class="sponsors-tier"><div class="tier-header"><div class="tier-badge tier-bronze-bg">Community Partners</div><div class="tier-desc">In-kind &amp; community support</div></div><div class="sponsors-grid"><div class="sponsor-card sm"><div class="sponsor-logo">&#x1F91D;</div><div class="sponsor-name">Partner A</div></div><div class="sponsor-card sm"><div class="sponsor-logo">&#x1F91D;</div><div class="sponsor-name">Partner B</div></div><div class="sponsor-card sm"><div class="sponsor-logo">&#x1F91D;</div><div class="sponsor-name">Partner C</div></div><div class="sponsor-card sm"><div class="sponsor-logo">&#x1F91D;</div><div class="sponsor-name">Partner D</div></div></div></div>
+  <div class="sponsor-cta"><div class="sponsor-cta-title">Become a Sponsor</div><div class="sponsor-cta-desc">Support the next generation of autonomous underwater systems engineers. Get visibility at international competitions.</div><button class="btn-brutal white" onclick="showPage('contact')">Get in Touch &rarr;</button></div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<!-- ====== CONTACT ====== -->
+<div id="page-contact" class="page">
+<div class="page-banner"><div class="page-banner-sub">Reach Us</div><h1 class="page-banner-title">GET IN <span class="stroke">TOUCH</span></h1><p class="page-banner-desc">Joining the team, sponsoring us, or just want to talk robotics &mdash; we'd love to hear from you.</p><div class="page-banner-num">07</div></div>
+<div class="contact-page">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="contact-item"><div class="contact-icon">&#x2709;&#xFE0F;</div><div><div class="contact-label">Email</div><div class="contact-value"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="caaeb8afabaea4a5bfada2bee4b8a5a8a5bea3a9b98abca3bee4aba9e4a3a4">[email&#160;protected]</a></div><div class="contact-handle">Official team email</div></div></div>
+      <div class="contact-item"><div class="contact-icon">&#x1F4F8;</div><div><div class="contact-label">Instagram</div><div class="contact-value">@dreadnought_robotics</div><div class="contact-handle">Updates &amp; behind the scenes</div></div></div>
+      <div class="contact-item"><div class="contact-icon">&#x1F4BC;</div><div><div class="contact-label">LinkedIn</div><div class="contact-value">Dreadnought Robotics VIT</div><div class="contact-handle">Professional updates &amp; recruitment</div></div></div>
+      <div class="contact-item"><div class="contact-icon">&#x2328;&#xFE0F;</div><div><div class="contact-label">GitHub</div><div class="contact-value">github.com/dreadnought-robotics</div><div class="contact-handle">Open source projects &amp; repos</div></div></div>
+      <div class="contact-item" style="cursor:default;"><div class="contact-icon">&#x1F4CD;</div><div><div class="contact-label">Location</div><div class="contact-value">VIT Chennai Campus</div><div class="contact-handle">Vandalur&ndash;Kelambakkam Road, Chennai 600127</div></div></div>
+    </div>
+    <div class="contact-right">
+      <div class="form-title">Send a Message</div>
+      <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="your@email.com"></div>
+      <div class="form-group"><label class="form-label">Subject</label><input class="form-input" type="text" placeholder="Sponsorship / Joining / Collaboration"></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Tell us about yourself or your inquiry..."></textarea></div>
+      <button class="form-submit" onclick="this.textContent='MESSAGE SENT \u2713';this.style.background='var(--white)';this.style.color='var(--black)';">SEND MESSAGE &rarr;</button>
+    </div>
+  </div>
+</div>
+<footer><div class="footer-bottom" style="border-top:none;"><div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span></div><a href="#" onclick="showPage('home')" style="font-family:var(--font-mono);font-size:10px;color:var(--grey-mid);">&larr; Home</a></div></footer>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+function filterGallery(cat, el) {
+  document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.style.opacity = (cat === 'all' || item.dataset.cat === cat) ? '1' : '0.12';
+    item.style.transition = 'opacity 0.2s ease';
+  });
+}
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+  });
+}, { threshold: 0.06 });
+document.querySelectorAll('.achievement-card,.project-card,.team-card,.competition-card,.proj-page-card,.team-card-page').forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = `opacity 0.6s ease ${i * 0.1}s, transform 0.6s ease ${i * 0.1}s`;
+  io.observe(el);
+});
+</script>
+</body>
+</html> 
