@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DREADNOUGHT ROBOTICS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -221,19 +222,22 @@
       </div>
       <div class="competitions-grid">
         <div class="competition-card" onclick="showPage('competitions')">
-          <div class="competition-header">
+          <div class="competition-header sauvc-bg">
             <div>
               <div class="competition-header-title">SAUVC</div>
-              <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">Singapore &middot; International</div>
+              <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--white);margin-top:6px;text-transform:uppercase;">
+                Singapore · International
+              </div>
             </div>
           </div>
-          <div class="competition-content">
-            <div class="competition-name">Singapore AUV Challenge</div>
-            <div class="competition-location">&#x1F4CD; Singapore &middot; International</div>
-            <div class="competition-desc">Asia's most prestigious AUV competition. Zero human intervention during autonomous mission runs.</div>
-            <div class="competition-result"> TOP 25 &mdash; 2025</div>
-          </div>
-        </div>
+
+  <div class="competition-content">
+    <div class="competition-name">Singapore AUV Challenge</div>
+    <div class="competition-location">&#x1F4CD; Singapore · International</div>
+    <div class="competition-desc">Asia's most prestigious AUV competition. Zero human intervention during autonomous mission runs.</div>
+    <div class="competition-result"> TOP 25 — 2025</div>
+  </div>
+</div>
         <div class="competition-card" onclick="showPage('competitions')">
           <div class="competition-header">
             <div>
@@ -253,7 +257,7 @@
   </section>
 
   <!-- TEAM PREVIEW -->
-  <section class="team-preview">
+  <!-- <section class="team-preview">
     <div class="section-inner">
       <div class="section-header">
         <div>
@@ -274,7 +278,7 @@
         <button class="btn-brutal dark" onclick="showPage('team')">View Full Team &rarr;</button>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- FOOTER -->
   <footer>
@@ -283,11 +287,24 @@
         <div class="footer-brand-name">DREADNOUGHT</div>
         <p class="footer-tagline">Autonomous Underwater Robotics Team at VIT Chennai. Building intelligent machines for the world beneath the surface.</p>
         <div class="footer-socials">
-          <div class="footer-social">&#x1F4F8;</div>
-          <div class="footer-social">&#x1F4BC;</div>
-          <div class="footer-social">&#x2328;</div>
-          <div class="footer-social">&#x25B6;</div>
-        </div>
+
+          <a href="https://www.instagram.com/dreadnoughtrobotics?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="footer-social">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+        
+          <a href="https://www.linkedin.com/company/dreadnought-robotics/" target="_blank" class="footer-social">
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+        
+          <a href="https://x.com/YOUR_HANDLE" target="_blank" class="footer-social">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+        
+          <a href="mailto:dreadnoughtrobotics@vitstudent.ac.in" class="footer-social">
+            <i class="fa-solid fa-envelope"></i>
+          </a>
+
+</div>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Navigate</div>
@@ -302,7 +319,6 @@
         <div class="footer-col-title">Connect</div>
         <ul class="footer-links">
           <li><a href="#" onclick="showPage('gallery')">Gallery</a></li>
-          <li><a href="#" onclick="showPage('sponsors')">Sponsors</a></li>
           <li><a href="#" onclick="showPage('contact')">Contact</a></li>
         </ul>
       </div>
@@ -318,7 +334,7 @@
     </div>
     <div class="footer-bottom">
       <div class="footer-copy">&copy; 2024 <span>Dreadnought Robotics</span> &middot; VIT Chennai. All rights reserved.</div>
-      <div class="footer-copy" style="font-size:10px;">Built with discipline by the team.</div>
+      <div class="footer-copy" style="font-size:10px;">Built by Eshaan </div>
     </div>
   </footer>
 
