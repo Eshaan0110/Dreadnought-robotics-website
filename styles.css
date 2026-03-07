@@ -92,10 +92,9 @@ nav {
 
 /* ── HERO ────────────────────────────────────────────────── */
 .hero {
-  min-height: 100vh; padding-top: 64px; background: var(--black);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  position: relative; overflow: hidden; text-align: center;
+  min-height: 100vh; padding-top: 64px;
+  background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+              url('assets/hero-bg.jpeg') center/cover no-repeat;
 }
 .hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -148,7 +147,7 @@ nav {
 }
 .hero-sub {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--grey-mid); margin-top: 28px;
+  text-transform: uppercase; color: var(--off-white); margin-top: 28px;
   line-height: 1.8; max-width: 480px;
 }
 .hero-buttons {
@@ -157,17 +156,17 @@ nav {
 }
 .hero-stats-bar {
   position: relative; z-index: 2; width: 100%; margin-top: auto;
-  border-top: 3px solid var(--grey-dark);
+  border-top: 3px solid var(--off-white);
   display: grid; grid-template-columns: repeat(4,1fr);
 }
 .hero-stat-col {
   padding: 28px 32px;
-  border-right: 1px solid var(--grey-dark); text-align: left;
+  border-right: 1px solid var(--off-white); text-align: left;
 }
 .hero-stat-col:last-child { border-right: none; }
 .hero-stat-num { font-family: var(--font-display); font-size: 52px; color: var(--white); line-height: 1; }
-.hero-stat-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-mid); margin-top: 4px; }
-.hero-stat-desc { font-family: var(--font-body); font-size: 11px; color: var(--grey-dark); margin-top: 2px; }
+.hero-stat-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--off-white); margin-top: 4px; }
+.hero-stat-desc { font-family: var(--font-body); font-size: 11px; color: var(--off-white); margin-top: 2px; }
 
 /* ── BUTTONS ─────────────────────────────────────────────── */
 .btn-brutal {
@@ -518,4 +517,18 @@ footer { background: var(--black); border-top: var(--border-thick); padding: 60p
   .hero-buttons { flex-direction: column; }
   .btn-brutal { justify-content: center; }
   .team-preview-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.project-img-neo {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+  filter: grayscale(100%);
+}
+
+.project-img-neo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

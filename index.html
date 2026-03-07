@@ -9,21 +9,22 @@
 </head>
 <body>
 
-<!-- ============================================================
-     NAVBAR
-     ============================================================ -->
+<!-- NAVBAR -->
+
 <nav id="navbar">
   <div class="nav-logo" onclick="showPage('home')">
-    <div class="nav-logo-mark">D</div>
-    <div class="nav-logo-text">Dreadnought</div>
+    <!-- <div class="nav-logo-mark">D</div> -->
+    <!-- <div class="nav-logo-text">Dreadnought</div> -->
+
+    <img src="assets/DNT Logo Remastered White.png" alt="Dreadnought Logo" style="height:40px;">
   </div>
   <ul class="nav-links">
     <li><a href="#" onclick="showPage('home')"         id="nav-home"         class="active">Home</a></li>
     <li><a href="#" onclick="showPage('projects')"     id="nav-projects">Projects</a></li>
-    <li><a href="#" onclick="showPage('competitions')" id="nav-competitions">Competitions</a></li>
+    <!-- <li><a href="#" onclick="showPage('competitions')" id="nav-competitions">Competitions</a></li> -->
     <li><a href="#" onclick="showPage('team')"         id="nav-team">Team</a></li>
     <li><a href="#" onclick="showPage('gallery')"      id="nav-gallery">Gallery</a></li>
-    <li><a href="#" onclick="showPage('sponsors')"     id="nav-sponsors">Sponsors</a></li>
+    <!-- <li><a href="#" onclick="showPage('sponsors')"     id="nav-sponsors">Sponsors</a></li> -->
     <li><a href="#" onclick="showPage('contact')"      id="nav-contact">Contact</a></li>
   </ul>
   <a href="#" class="nav-cta" onclick="showPage('contact')">Join Us</a>
@@ -35,10 +36,11 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#" onclick="showPage('home');toggleMenu()">Home</a>
   <a href="#" onclick="showPage('projects');toggleMenu()">Projects</a>
-  <a href="#" onclick="showPage('competitions');toggleMenu()">Competitions</a>
+  <!-- <a href="#" onclick="showPage('competitions');toggleMenu()">Competitions</a> -->
+
   <a href="#" onclick="showPage('team');toggleMenu()">Team</a>
   <a href="#" onclick="showPage('gallery');toggleMenu()">Gallery</a>
-  <a href="#" onclick="showPage('sponsors');toggleMenu()">Sponsors</a>
+  <!-- <a href="#" onclick="showPage('sponsors');toggleMenu()">Sponsors</a> -->
   <a href="#" onclick="showPage('contact');toggleMenu()">Contact</a>
 </div>
 
@@ -53,7 +55,7 @@
     <div class="hero-center">
       <div class="hero-eyebrow">VIT Chennai &middot; Autonomous Robotics &middot; Est. 2019</div>
       <div class="hero-logo-block">
-        <div class="hero-logo-block-inner">DR</div>
+        <img src="assets/DNT Logo Remastered White.png" alt="DR Logo" style="width:80px; height:80px; object-fit:contain;">
       </div>
       <span class="hero-title-top">DREADNOUGHT</span>
       <span class="hero-title-bottom">ROBOTICS</span>
@@ -99,32 +101,28 @@
       </div>
       <div class="achievements-grid">
         <div class="achievement-card">
-          <span class="achievement-icon">&#x1F948;</span>
-          <div class="achievement-year">2023</div>
+          <div class="achievement-year">2024</div>
           <div class="achievement-rank">Runner-Up</div>
           <div class="achievement-title">TAC Autonomy Challenge</div>
-          <div class="achievement-desc">Secured second place among top engineering teams in India competing in autonomous systems.</div>
+          <div class="achievement-desc">Secured second place in the TAC Autonomy Challenge with an advanced autonomous underwater navigation system.</div>
         </div>
         <div class="achievement-card">
-          <span class="achievement-icon">&#x1F30F;</span>
-          <div class="achievement-year">2023</div>
-          <div class="achievement-rank">International Selection</div>
+          <div class="achievement-year">2026</div>
+          <div class="achievement-rank">Top 4</div>
           <div class="achievement-title">SAUVC Singapore</div>
-          <div class="achievement-desc">Selected to represent VIT Chennai at the Singapore Autonomous Underwater Vehicle Challenge.</div>
+          <div class="achievement-desc"> Ranked among the Top 4 teams at the Singapore Autonomous Underwater Vehicle Challenge and received the Most Innovative AUV Design award for our underwater robotics platform.</div>
         </div>
         <div class="achievement-card">
-          <span class="achievement-icon">&#x1F3C6;</span>
-          <div class="achievement-year">2022</div>
-          <div class="achievement-rank">National Recognition</div>
-          <div class="achievement-title">National Robotics Summit</div>
-          <div class="achievement-desc">Recognized for excellence in underwater robotics design and autonomous navigation systems.</div>
+          <div class="achievement-year">2025</div>
+          <div class="achievement-rank">Top 25</div>
+          <div class="achievement-title">SAUVC Singapore</div>
+          <div class="achievement-desc">Selected to represent India and VIT Chennai at the Singapore Autonomous Underwater Vehicle Challenge, competing with top global AUV teams.</div>
         </div>
         <div class="achievement-card">
-          <span class="achievement-icon">&#x1F52C;</span>
-          <div class="achievement-year">2022&ndash;24</div>
-          <div class="achievement-rank">Research &amp; Innovation</div>
-          <div class="achievement-title">Published Research</div>
-          <div class="achievement-desc">Team members contributed peer-reviewed publications in robotics, CV, and embedded systems.</div>
+          <div class="achievement-year">2026</div>
+          <div class="achievement-rank">Winners</div>
+          <div class="achievement-title">Robofest</div>
+          <div class="achievement-desc">Won National Competition held in Gujrat and won 2.5 Lakhs</div>
         </div>
       </div>
     </div>
@@ -133,8 +131,8 @@
   <!-- ABOUT -->
   <div class="about">
     <div class="about-img-side">
-      <div class="about-img-placeholder-neo">AUV<br>MIRA<br>2023</div>
-      <div class="about-img-label">Team Photo &mdash; SAUVC Preparation</div>
+      <img src="assets/AUV-MIRA223.jpeg" alt="MIRA AUV 2023" style="width:100%; height:100%; object-fit:cover;">
+      <div class="about-img-label">Project MIRA &mdash;TAC Challenge 2024</div>
     </div>
     <div class="about-content-side">
       <div class="section-label">Who We Are</div>
@@ -169,41 +167,42 @@
     </div>
     <div class="projects-grid">
       <div class="project-card" onclick="showPage('projects')">
-        <div class="project-img-neo"><div class="project-img-neo-bg">AUV</div><div class="project-img-badge">Flagship &middot; AUV</div><div class="project-num">01</div></div>
+        <div class="project-img-neo">
+          <img src="assets/MIRA2.jpeg" alt="Project MIRA 2.0 AUV">
+          <div class="project-img-badge">Flagship · AUV</div>
+          <div class="project-num">01</div>
+        </div>
         <div class="project-content-inner">
-          <div class="project-title">MIRA AUV</div>
-          <div class="project-desc">Full competition AUV with 6-DOF control, stereo vision, DVL-IMU navigation. Built for SAUVC tasks.</div>
+          <div class="project-title">Project MIRA 2.0 </div>
+          <div class="project-desc">Competition-grade Autonomous Underwater Vehicle designed for SAUVC and TAC, featuring 6-DOF motion control, stereo vision perception, and integrated IMU-based navigation for autonomous task execution.</div>
           <div class="project-tags"><span class="project-tag">ROS2</span><span class="project-tag">Computer Vision</span><span class="project-tag">SLAM</span></div>
           <a class="project-link">View Project &rarr;</a>
         </div>
       </div>
       <div class="project-card" onclick="showPage('projects')">
-        <div class="project-img-neo"><div class="project-img-neo-bg">ARM</div><div class="project-img-badge">Manipulation</div><div class="project-num">02</div></div>
-        <div class="project-content-inner">
-          <div class="project-title">Dexterous Arm</div>
-          <div class="project-desc">7-DOF underwater manipulator with force feedback for competition object retrieval.</div>
-          <div class="project-tags"><span class="project-tag">Servo Control</span><span class="project-tag">MoveIt2</span><span class="project-tag">Force Sensing</span></div>
-          <a class="project-link">View Project &rarr;</a>
-        </div>
-      </div>
-      <div class="project-card" onclick="showPage('projects')">
-        <div class="project-img-neo"><div class="project-img-neo-bg">CV</div><div class="project-img-badge">AI / Vision</div><div class="project-num">03</div></div>
-        <div class="project-content-inner">
-          <div class="project-title">CV Pipeline</div>
-          <div class="project-desc">Real-time underwater object detection using custom YOLOv8 models for competition task recognition.</div>
-          <div class="project-tags"><span class="project-tag">YOLOv8</span><span class="project-tag">PyTorch</span><span class="project-tag">TensorRT</span></div>
-          <a class="project-link">View Project &rarr;</a>
-        </div>
-      </div>
-      <div class="project-card" onclick="showPage('projects')">
-        <div class="project-img-neo"><div class="project-img-neo-bg">NAV</div><div class="project-img-badge">Navigation</div><div class="project-num">04</div></div>
-        <div class="project-content-inner">
-          <div class="project-title">Navigation Stack</div>
-          <div class="project-desc">Multi-sensor fusion combining DVL, IMU, and pressure sensors with EKF for &lt;5cm positioning.</div>
-          <div class="project-tags"><span class="project-tag">EKF</span><span class="project-tag">DVL</span><span class="project-tag">IMU Fusion</span></div>
-          <a class="project-link">View Project &rarr;</a>
-        </div>
-      </div>
+  <div class="project-img-neo">
+    <img src="assets/MIRA1.jpeg" alt="Project MIRA AUV">
+    <div class="project-img-badge">AUV</div>
+    <div class="project-num">02</div>
+  </div>
+
+  <div class="project-content-inner">
+    <div class="project-title">Project MIRA</div>
+
+    <div class="project-desc">
+      Our first-generation competition Autonomous Underwater Vehicle developed for underwater robotics challenges.
+      MIRA features 6-DOF motion control, vision-based perception, and an onboard autonomy stack for executing mission tasks.
+    </div>
+
+    <div class="project-tags">
+      <span class="project-tag">ROS</span>
+      <span class="project-tag">Computer Vision</span>
+      <span class="project-tag">Autonomous Navigation</span>
+    </div>
+
+    <a class="project-link">View Project &rarr;</a>
+  </div>
+</div>
     </div>
     <div style="padding:40px 48px 0; max-width:1280px; margin:0 auto;">
       <button class="btn-brutal dark" onclick="showPage('projects')">View All Projects &rarr;</button>
@@ -227,28 +226,26 @@
               <div class="competition-header-title">SAUVC</div>
               <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">Singapore &middot; International</div>
             </div>
-            <div class="competition-flag">&#x1F30A;</div>
           </div>
           <div class="competition-content">
             <div class="competition-name">Singapore AUV Challenge</div>
-            <div class="competition-location">&#x1F4CD; Singapore &middot; Annual</div>
+            <div class="competition-location">&#x1F4CD; Singapore &middot; International</div>
             <div class="competition-desc">Asia's most prestigious AUV competition. Zero human intervention during autonomous mission runs.</div>
-            <div class="competition-result">&#x2713; Selected &mdash; 2023</div>
+            <div class="competition-result"> TOP 25 &mdash; 2025</div>
           </div>
         </div>
         <div class="competition-card" onclick="showPage('competitions')">
           <div class="competition-header">
             <div>
-              <div class="competition-header-title">TAC</div>
-              <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">India &middot; National</div>
+              <div class="competition-header-title">TAC Challenge</div>
+              <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--grey-mid);margin-top:6px;text-transform:uppercase;">Norway &middot; International</div>
             </div>
-            <div class="competition-flag">&#x2699;&#xFE0F;</div>
           </div>
           <div class="competition-content">
             <div class="competition-name">TAC Autonomy Challenge</div>
-            <div class="competition-location">&#x1F4CD; India &middot; National</div>
-            <div class="competition-desc">India's premier autonomous systems challenge. Teams from IITs, NITs, and top engineering institutes.</div>
-            <div class="competition-result">&#x1F948; Runner-Up &mdash; 2023</div>
+            <div class="competition-location">&#x1F4CD; Norway &middot; International</div>
+            <div class="competition-desc">Norway's premier autonomous systems challenge. Teams from top engineering institutes.</div>
+            <div class="competition-result"> Runner-Up &mdash; 2024</div>
           </div>
         </div>
       </div>
